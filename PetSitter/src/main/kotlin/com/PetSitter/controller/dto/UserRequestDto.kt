@@ -6,5 +6,7 @@ data class UserRequestDto(
     @field:JsonProperty("first_name")
     val firstName: String,
     @field:JsonProperty("last_name")
-    val lastName: String
+    val lastName: String,
+    @field:JsonProperty("contacts")
+    val contacts: String
 )

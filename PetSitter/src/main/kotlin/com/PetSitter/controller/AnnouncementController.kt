@@ -3,6 +3,7 @@ package com.PetSitter.controller
 import com.PetSitter.controller.dto.Animal
 import com.PetSitter.controller.dto.ConsumerAnnouncementRequestDto
 import com.PetSitter.controller.dto.PetSitterAnnouncementRequestDto
+import com.PetSitter.domain.model.Attendance
 import org.springframework.stereotype.Controller
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
@@ -30,10 +31,10 @@ class AnnouncementController {
 
     @GetMapping("/consumer")
     fun getConsumerAnnouncementByFilter(
-        @RequestParam("location", required = false) location: String,
-        @RequestParam("begin_date", required = false) beginDate: LocalDate,
-        @RequestParam("end_date", required = false) endDate: LocalDate,
-        @RequestParam("attendance_type", required = false) attendanceType: String,
+        @RequestParam("location", required = false) location: String?,
+        @RequestParam("begin_date", required = false) beginDate: LocalDate?,
+        @RequestParam("end_date", required = false) endDate: LocalDate?,
+        @RequestParam("attendance_type", required = false) attendanceType: Attendance?,
         @RequestParam("animal_types", required = false) animalTypes: Set<Animal>
     ) {
 

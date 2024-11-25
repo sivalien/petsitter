@@ -1,5 +1,6 @@
 package com.PetSitter.controller.dto
 
+import com.PetSitter.domain.model.Attendance
 import com.fasterxml.jackson.annotation.JsonProperty
 import java.time.LocalDate
 
@@ -18,5 +19,4 @@ data class ConsumerAnnouncementRequestDto(
     val animals: Set<Animal>
 )
 
-enum class Attendance {In, OUT}
 enum class Animal {CAT, DOG, OTHER}

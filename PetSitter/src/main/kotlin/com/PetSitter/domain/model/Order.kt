@@ -7,4 +7,4 @@ data class Order(
     val status: OrderStatus
 )
 
-enum class OrderStatus {PENDING, ACCEPTED, REJECTED, DONE}
+enum class OrderStatus {CREATED, ACCEPTED, REJECTED, DONE}

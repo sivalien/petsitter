@@ -3,7 +3,7 @@ package com.PetSitter.domain.model
 import java.time.LocalDate
 
 data class ConsumerAnnouncementDto(
-    val consumerId: Int,
+    val consumerId: Long,
     val location: String,
     val description: String,
     val withCat: Boolean,
@@ -11,17 +11,21 @@ data class ConsumerAnnouncementDto(
     val withOther: Boolean,
     val beginDate: LocalDate,
     val endDate: LocalDate,
-    val attendanceIn: Boolean,
+    val attendance: Attendance,
 )
 
 data class ConsumerAnnouncement(
-    val id: Int,
-    val consumerId: Int,
+    val id: Long,
+    val consumerId: Long,
     val description: String,
     val withCat: Boolean,
     val withDog: Boolean,
     val withOther: Boolean,
     val beginDate: LocalDate,
     val endDate: LocalDate,
-    val attendanceIn: Boolean,
+    val attendance: Attendance,
 )
+
+enum class Attendance {
+    IN, OUT
+}

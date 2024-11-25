@@ -1,5 +1,6 @@
 package com.PetSitter.controller.dto
 
+import com.PetSitter.domain.model.Attendance
 import com.fasterxml.jackson.annotation.JsonProperty
 
 data class PetSitterAnnouncementRequestDto(
