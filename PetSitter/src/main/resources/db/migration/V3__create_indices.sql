@@ -1,0 +1,1 @@
+create index if not exists login_idx on users (login);
