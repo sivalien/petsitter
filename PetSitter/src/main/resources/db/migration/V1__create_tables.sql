@@ -1,11 +1,3 @@
-drop table review;
-drop table order_history;
-drop table orders;
-drop table sitter;
-drop table customer;
-drop table users;
-
-
 create table if not exists users(
     id         bigserial primary key,
     login      varchar(255) unique not null,

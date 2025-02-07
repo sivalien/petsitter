@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty
 
 data class OrderConfirmation(
     @field:JsonProperty("order")
-    val order: OrderRequest,
+    val order: OrderAction,
     @field:JsonProperty("contacts")
     val contacts: String
 )

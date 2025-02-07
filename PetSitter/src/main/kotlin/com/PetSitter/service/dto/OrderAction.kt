@@ -4,7 +4,7 @@ import com.PetSitter.controller.dto.response.CustomerResponse
 import com.PetSitter.controller.dto.response.SitterResponse
 import com.fasterxml.jackson.annotation.JsonProperty
 
-data class OrderRequest(
+data class OrderAction(
     @field:JsonProperty("customer")
     val customer: CustomerResponse,
     @field:JsonProperty("sitter")

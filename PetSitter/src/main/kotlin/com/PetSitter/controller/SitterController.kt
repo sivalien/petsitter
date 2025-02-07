@@ -2,7 +2,7 @@ package com.PetSitter.controller
 
 import com.PetSitter.controller.dto.request.SitterRequest
 import com.PetSitter.controller.dto.response.SitterResponse
-import com.PetSitter.repository.dto.SitterFilter
+import com.PetSitter.controller.dto.request.SitterFilterRequest
 import com.PetSitter.service.SitterService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -24,7 +24,7 @@ class SitterController(
 
     @GetMapping("/filter")
     fun getSitterByFilter(
-        sitterFilter: SitterFilter
+        sitterFilter: SitterFilterRequest
     ) : ResponseEntity<List<SitterResponse>> {
         return ResponseEntity.ok(sitterService.getByFilter(sitterFilter))
     }

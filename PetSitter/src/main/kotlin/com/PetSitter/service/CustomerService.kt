@@ -3,10 +3,12 @@ package com.PetSitter.service
 import com.PetSitter.controller.BadRequestException
 import com.PetSitter.controller.ForbiddenException
 import com.PetSitter.controller.NotFoundException
+import com.PetSitter.controller.dto.request.CustomerFilterRequest
 import com.PetSitter.controller.dto.request.CustomerRequest
 import com.PetSitter.repository.CustomerRepository
 import com.PetSitter.controller.dto.response.CustomerResponse
 import com.PetSitter.repository.dto.*
+import com.PetSitter.service.dto.CustomerDto
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
@@ -88,7 +90,7 @@ class CustomerService(
     }
 
     fun getByFilter(
-        filter: CustomerFilter
+        filter: CustomerFilterRequest
     ) : List<CustomerResponse> {
         println(filter)
         val uri = UriComponentsBuilder.fromHttpUrl("$internalApiUrl/customer")

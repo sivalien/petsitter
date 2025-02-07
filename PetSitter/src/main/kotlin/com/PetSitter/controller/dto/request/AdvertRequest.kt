@@ -1,6 +1,6 @@
 package com.PetSitter.controller.dto.request
 
-import com.PetSitter.repository.dto.AdvertDto
+import com.PetSitter.service.dto.AdvertDto
 import com.PetSitter.repository.dto.Animal
 import com.PetSitter.repository.dto.Attendance
 import com.fasterxml.jackson.annotation.JsonProperty

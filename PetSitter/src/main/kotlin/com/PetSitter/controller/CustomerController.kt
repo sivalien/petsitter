@@ -2,7 +2,7 @@ package com.PetSitter.controller
 
 import com.PetSitter.controller.dto.request.CustomerRequest
 import com.PetSitter.controller.dto.response.CustomerResponse
-import com.PetSitter.repository.dto.CustomerFilter
+import com.PetSitter.controller.dto.request.CustomerFilterRequest
 import com.PetSitter.service.CustomerService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller
@@ -23,7 +23,7 @@ class CustomerController(
 
     @GetMapping("/filter")
     fun getConsumerAnnouncementByFilter(
-        customerFilter: CustomerFilter
+        customerFilter: CustomerFilterRequest
     ) : ResponseEntity<List<CustomerResponse>> {
         val byFilter = customerService.getByFilter(customerFilter)
         return ResponseEntity.ok(byFilter)

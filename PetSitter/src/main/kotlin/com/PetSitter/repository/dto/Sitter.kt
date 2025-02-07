@@ -3,11 +3,6 @@ package com.PetSitter.repository.dto
 import com.PetSitter.controller.dto.response.SitterResponse
 import com.PetSitter.view.UserView
 
-data class SitterDto(
-    val advertDto: AdvertDto,
-    val isVet: Boolean
-)
-
 data class Sitter(
     val advert: Advert,
     val isVet: Boolean
@@ -26,10 +21,3 @@ data class Sitter(
         )
     }
 }
-
-data class SitterFilter(
-    val location: String?,
-    val attendanceTypes: List<Attendance>?,
-    val animalTypes: List<Animal>?,
-    val isVet: Boolean?
-)

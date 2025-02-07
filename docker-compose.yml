@@ -1,0 +1,89 @@
+version: '1'
+
+services:
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
+    environment:
+        ZOOKEEPER_CLIENT_PORT: 2181
+    ports:
+      - "2181:2181"
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    container_name: kafka
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+    ports:
+      - "9092:9092"
+
+  db:
+    image: 'postgres:13.1-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=$DATABASE_NAME
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - POSTGRES_DB=petsitter
+    ports:
+      - "5432:5432"
+
+  sitter_api:
+    build:
+      context: ./PetSitter
+    container_name: sitter_api
+    depends_on:
+      - db
+      - kafka
+    environment:
+      - POSTGRES_USER=$DATABASE_NAME
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/petsitter
+      - SPRING_DATASOURCE_USERNAME=$DATABASE_NAME
+      - SPRING_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
+      - JWT_KEY=$JWT_KEY
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - INTERNAL_API_URL=http://internal:8082
+      - NOTIFICATION_API_URL=http://notification:8082
+    ports:
+      - "8080:8080"
+
+  internal:
+    build:
+      context: ./internal
+    container_name: internal
+    depends_on:
+      - db
+      - kafka
+    environment:
+      - POSTGRES_USER=$DATABASE_NAME
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/petsitter
+      - SPRING_DATASOURCE_USERNAME=$DATABASE_NAME
+      - SPRING_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    ports:
+      - "8082:8082"
+
+  notification:
+    build:
+      context: ./notification
+    container_name: notification
+    depends_on:
+      - db
+      - kafka
+    environment:
+      - POSTGRES_USER=$DATABASE_NAME
+      - POSTGRES_PASSWORD=$DATABASE_PASSWORD
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/petsitter
+      - SPRING_DATASOURCE_USERNAME=$DATABASE_NAME
+      - SPRING_DATASOURCE_PASSWORD=$DATABASE_PASSWORD
+      - MAIL_NAME=$MAIL_NAME
+      - MAIL_PASSWORD=$MAIL_PASSWORD
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+    ports:
+      - "8081:8081"

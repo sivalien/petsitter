@@ -12,7 +12,7 @@ import com.PetSitter.repository.dto.Order
 import com.PetSitter.repository.dto.OrderStatus
 import com.PetSitter.repository.dto.Sitter
 import com.PetSitter.service.dto.OrderConfirmation
-import com.PetSitter.service.dto.OrderRequest
+import com.PetSitter.service.dto.OrderAction
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.HttpStatusCode
 import org.springframework.http.MediaType
@@ -71,7 +71,7 @@ class OrderService(
         val order = orderRepository.create(sitterId, customerId, OrderStatus.PENDING, userId)!!
         sendToNotificationService(
             "order/request",
-            OrderRequest(
+            OrderAction(
                 customer.toCustomerView(userService.getById(customer.userId)),
                 SitterResponse(userService.getById(sitter.advert.userId), sitter),
                 toSitter
@@ -106,7 +106,7 @@ class OrderService(
         sendToNotificationService(
             "order/accept",
             OrderConfirmation(
-                OrderRequest(
+                OrderAction(
                     customer.toCustomerView(customerUser),
                     SitterResponse(userService.getById(sitter.advert.userId), sitter),
                     toSitter
@@ -136,7 +136,7 @@ class OrderService(
 
         sendToNotificationService(
             "order/reject",
-            OrderRequest(
+            OrderAction(
                 customer.toCustomerView(userService.getById(customer.advert.userId)),
                 SitterResponse(userService.getById(sitter.advert.userId), sitter),
                 toSitter

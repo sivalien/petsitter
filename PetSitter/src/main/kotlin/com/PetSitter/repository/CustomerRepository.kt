@@ -2,7 +2,7 @@ package com.PetSitter.repository
 
 import com.PetSitter.repository.dto.Advert
 import com.PetSitter.repository.dto.Customer
-import com.PetSitter.repository.dto.CustomerDto
+import com.PetSitter.service.dto.CustomerDto
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate

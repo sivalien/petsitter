@@ -5,12 +5,6 @@ import com.PetSitter.controller.dto.response.CustomerResponse
 import com.PetSitter.view.UserView
 import java.time.LocalDate
 
-data class CustomerDto(
-    val advert: AdvertDto,
-    val beginDate: LocalDate,
-    val endDate: LocalDate
-)
-
 data class Customer(
     val advert: Advert,
     val beginDate: LocalDate,
@@ -37,10 +31,3 @@ data class Customer(
     }
 }
 
-data class CustomerFilter(
-    val location: String?,
-    val beginDate: LocalDate?,
-    val endDate: LocalDate?,
-    val attendanceTypes: Set<Attendance>?,
-    val animalTypes: Set<Animal>?
-)
