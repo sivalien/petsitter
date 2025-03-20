@@ -1,8 +1,7 @@
-package com.sitter.internal.model
+package com.sitter.internal.repository.dto
 
-import com.sitter.internal.view.Animal
-import com.sitter.internal.view.Attendance
-import com.sitter.internal.view.SitterView
+import com.sitter.internal.controller.dto.Animal
+import com.sitter.internal.controller.dto.SitterView
 
 
 data class Sitter(
@@ -17,7 +16,8 @@ data class Sitter(
 
 data class SitterFilter(
     val location: String?,
-    val attendance: List<Attendance>,
     val animalTypes: List<Animal>,
-    val isVet: Boolean?
+    val isVet: Boolean?,
+    val attendanceIn: Boolean,
+    val attendanceOut: Boolean,
 )

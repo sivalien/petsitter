@@ -1,4 +1,4 @@
-package com.sitter.internal.model
+package com.sitter.internal.repository.dto
 
 import java.time.LocalDate
 

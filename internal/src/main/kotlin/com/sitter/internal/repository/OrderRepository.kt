@@ -1,6 +1,6 @@
 package com.sitter.internal.repository
 
-import com.sitter.internal.model.*
+import com.sitter.internal.repository.dto.*
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository

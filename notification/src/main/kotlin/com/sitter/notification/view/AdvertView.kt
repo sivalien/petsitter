@@ -22,8 +22,10 @@ data class AdvertView (
     val description: String,
     @field:JsonProperty("animal_types")
     val animalTypes: List<Animal>,
-    @field:JsonProperty("attendance_types")
-    val attendance: List<Attendance>,
+    @field:JsonProperty("attendance_in")
+    val attendanceIn: Boolean,
+    @field:JsonProperty("attendance_out")
+    val attendanceOut: Boolean,
 )
 
 enum class Attendance { IN, OUT }

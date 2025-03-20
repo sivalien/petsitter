@@ -38,15 +38,6 @@ class SitterController(
         return ResponseEntity.ok(sitterService.updateSitter(userId, sitterId, sitterRequest))
     }
 
-    @DeleteMapping("/{sitter_id}")
-    fun delete(
-        @RequestAttribute("uid") userId: Long,
-        @PathVariable("sitter_id") sitterId: Long,
-    ) : ResponseEntity<String> {
-        sitterService.delete(userId, sitterId)
-        return ResponseEntity.ok("Sitter successfully deleted")
-    }
-
     @GetMapping("")
     fun getByUserId(@RequestAttribute("uid") userId: Long) : ResponseEntity<List<SitterResponse>> {
         return ResponseEntity.ok(sitterService.getViewByUserId(userId))

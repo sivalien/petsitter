@@ -1,12 +1,12 @@
 package com.sitter.internal.service
 
-import com.sitter.internal.message.ReviewNotification
-import com.sitter.internal.message.ReviewRequest
-import com.sitter.internal.model.DoneOrder
-import com.sitter.internal.model.FullOrder
+import com.sitter.internal.repository.dto.FullOrder
 import com.sitter.internal.repository.OrderHistoryRepository
 import com.sitter.internal.repository.OrderRepository
-import com.sitter.internal.model.OrderStatus
+import com.sitter.internal.repository.dto.DoneOrder
+import com.sitter.internal.repository.dto.OrderStatus
+import com.sitter.internal.service.dto.ReviewNotification
+import com.sitter.internal.service.dto.ReviewRequest
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
@@ -30,7 +30,7 @@ class DoneOrderService(
         val executor = Executors.newScheduledThreadPool(3)
         executor.scheduleAtFixedRate(
             { doJob() },
-            interval,
+            1,
             interval,
             TimeUnit.MINUTES
         )

@@ -37,16 +37,5 @@ class UserController(
     fun getUserInfo(@RequestAttribute("uid") userId: Long) : ResponseEntity<UserResponse> {
         return ResponseEntity.ok(userService.getById(userId).toUserResponse())
     }
-
-    @PutMapping("", consumes = ["application/json"])
-    fun changeUserInfo(
-        @RequestBody userRequest: UserRequest,
-        @RequestAttribute("uid") userId: Long
-    ) : ResponseEntity<UserResponse> {
-        return ResponseEntity.ok(userService.changeUserInfo(userId, userRequest).toUserResponse())
-    }
-
-//    @PostMapping("/refresh")
-//    fun refresh(@RequestBody refreshTokenRequest: RefreshTokenRequest) :
 }
 

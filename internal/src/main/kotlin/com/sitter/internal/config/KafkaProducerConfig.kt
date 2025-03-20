@@ -1,8 +1,8 @@
 package com.sitter.internal.config
 
-import com.sitter.internal.message.CustomerCreatedNotification
-import com.sitter.internal.message.ReviewNotification
-import com.sitter.internal.message.SitterCreatedNotification
+import com.sitter.internal.service.dto.CustomerCreatedNotification
+import com.sitter.internal.service.dto.ReviewNotification
+import com.sitter.internal.service.dto.SitterCreatedNotification
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean

@@ -7,10 +7,10 @@ import com.PetSitter.controller.dto.request.CustomerFilterRequest
 import com.PetSitter.controller.dto.request.CustomerRequest
 import com.PetSitter.repository.CustomerRepository
 import com.PetSitter.controller.dto.response.CustomerResponse
+import com.PetSitter.repository.KafkaMessageRepository
 import com.PetSitter.repository.dto.*
 import com.PetSitter.service.dto.CustomerDto
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestClient
@@ -22,11 +22,9 @@ class CustomerService(
     @Value("\${internal.api.url}")
     private val internalApiUrl: String,
     private val customerRepository: CustomerRepository,
-    private val customerCreatedKafkaTemplate: KafkaTemplate<String, CustomerResponse>,
-    @Value("\${kafka.customer.created.topic}")
-    private val customerCreatedTopicName: String,
     private val restClient: RestClient,
-    private val userService: UserService
+    private val userService: UserService,
+    private val kafkaMessageRepository: KafkaMessageRepository
 ) {
     @Transactional
     fun create(userId: Long, requestDto: CustomerRequest) : CustomerResponse {
@@ -41,7 +39,11 @@ class CustomerService(
             )
         )!!
         val customerResponse = CustomerResponse(user, customer)
-        customerCreatedKafkaTemplate.send(customerCreatedTopicName, customerResponse)
+        kafkaMessageRepository.create(
+            KafkaMessageType.CUSTOMER_CREATED,
+            customerResponse.toCustomerCreatedMessage().toByteArray(),
+            KafkaMessageStatus.NEW
+        )
         return customerResponse
     }
 
@@ -53,6 +55,7 @@ class CustomerService(
         return customerRepository.getByUserIdAndAvailable(userId, true)
     }
 
+    @Transactional
     fun getViewByUserId(userId: Long) : List<CustomerResponse> {
         return getEnabledByUserId(userId)?.let { listOf(it.toCustomerView(userService.getById(userId))) } ?: emptyList()
     }
@@ -65,23 +68,7 @@ class CustomerService(
         customerRepository.setAvailable(customerId, true)
     }
 
-    fun changeCustomer(userId: Long, customerId: Long, customerRequest: CustomerRequest) : CustomerResponse {
-        val customer = getById(customerId)
-        if (userId != customer.userId)
-            throw ForbiddenException("Have not rights to update this customer announcement")
-        return CustomerResponse(
-            userService.getById(userId),
-            customerRepository.updateCustomer(
-                customerId,
-                CustomerDto(
-                    customerRequest.advert.toAdvertDto(userId),
-                    customerRequest.beginDate,
-                    customerRequest.endDate
-                )
-            )!!
-        )
-    }
-
+    @Transactional
     fun deleteCustomer(userId: Long, customerId: Long) {
         val customer = getById(customerId)
         if (customer.advert.userId != userId)
@@ -97,7 +84,8 @@ class CustomerService(
             .queryParamIfPresent("location", Optional.ofNullable(filter.location))
             .queryParam("dateBegin", filter.beginDate)
             .queryParam("dateEnd", filter.endDate)
-            .queryParam("attendanceTypes", filter.attendanceTypes ?: emptySet<Attendance>())
+            .queryParam("attendanceIn", filter.attendanceIn)
+            .queryParam("attendanceOut", filter.attendanceOut)
             .queryParam("animalTypes", filter.animalTypes ?: emptySet<Animal>())
             .build()
             .toUriString()

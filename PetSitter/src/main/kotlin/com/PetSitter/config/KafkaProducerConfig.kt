@@ -1,7 +1,5 @@
 package com.PetSitter.config
 
-import com.PetSitter.controller.dto.response.CustomerResponse
-import com.PetSitter.controller.dto.response.SitterResponse
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
@@ -21,24 +19,24 @@ class KafkaProducerConfig(
         return mapOf(
             ProducerConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapServers,
             ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.StringSerializer",
-            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to "org.springframework.kafka.support.serializer.JsonSerializer"
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG to "org.apache.kafka.common.serialization.ByteArraySerializer"
         )
     }
 
     @Bean
-    fun sitterCreatedFactory() : ProducerFactory<String, SitterResponse> {
+    fun sitterCreatedFactory() : ProducerFactory<String, ByteArray> {
         return DefaultKafkaProducerFactory(producerConfig())
     }
 
     @Bean
-    fun customerCreatedFactory() : ProducerFactory<String, CustomerResponse> =
+    fun customerCreatedFactory() : ProducerFactory<String, ByteArray> =
         DefaultKafkaProducerFactory(producerConfig())
 
     @Bean
-    fun sitterCreatedKafkaTemplate() : KafkaTemplate<String, SitterResponse> =
+    fun sitterCreatedKafkaTemplate() : KafkaTemplate<String, ByteArray> =
         KafkaTemplate(sitterCreatedFactory())
 
     @Bean
-    fun customerCreatedKafkaTemplate() : KafkaTemplate<String, CustomerResponse> =
+    fun customerCreatedKafkaTemplate() : KafkaTemplate<String, ByteArray> =
         KafkaTemplate(customerCreatedFactory())
 }

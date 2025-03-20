@@ -1,4 +1,4 @@
-package com.sitter.internal.model
+package com.sitter.internal.repository.dto
 
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -8,4 +8,3 @@ data class User (
     @JsonProperty("first_name") val firstName: String,
     @JsonProperty("last_name") val lastName: String,
 )
-

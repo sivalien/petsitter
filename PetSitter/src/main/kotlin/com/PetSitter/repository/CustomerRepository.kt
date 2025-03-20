@@ -58,21 +58,6 @@ class CustomerRepository(
         jdbcTemplate.update("update customer set available=? where id=?", value, id)
     }
 
-    fun updateCustomer(customerId: Long, customer: CustomerDto) : Customer? {
-        return jdbcTemplate.query(
-            "update customer " +
-                    "set location=?, description=?, begin_date=?, end_date=?, attendance_in=?, attendance_out=?, " +
-                    "with_dog=?, with_cat=?, with_other=? where id=? " +
-                    "returning id, begin_date, end_date, user_id, location, description, attendance_in, " +
-                    "attendance_out, with_dog, with_cat, with_other, available",
-            mapper,
-            customer.advert.location, customer.advert.description, customer.beginDate, customer.endDate,
-            customer.advert.attendanceIn, customer.advert.attendanceOut,
-            customer.advert.withDog, customer.advert.withCat, customer.advert.withOther,
-            customerId
-        ).singleOrNull()
-    }
-
     fun deleteCustomer(customerId: Long) {
         jdbcTemplate.update("delete from customer where id=?", customerId)
     }

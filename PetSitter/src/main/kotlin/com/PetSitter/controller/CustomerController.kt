@@ -29,15 +29,6 @@ class CustomerController(
         return ResponseEntity.ok(byFilter)
     }
 
-    @PutMapping("/{customer_id}")
-    fun updateCustomer(
-        @RequestAttribute("uid") userId: Long,
-        @PathVariable("customer_id") customerId: Long,
-        @RequestBody customerRequest: CustomerRequest,
-    ) : ResponseEntity<CustomerResponse> {
-        return ResponseEntity.ok(customerService.changeCustomer(userId, customerId, customerRequest))
-    }
-
     @DeleteMapping("/{customer_id}")
     fun deleteCustomer(
         @RequestAttribute("uid") userId: Long,

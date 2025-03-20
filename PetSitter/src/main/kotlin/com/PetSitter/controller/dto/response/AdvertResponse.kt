@@ -1,8 +1,8 @@
 package com.PetSitter.view
 
+import com.PetSitter.generated.AdvertCreatedMessage
 import com.PetSitter.repository.dto.Advert
 import com.PetSitter.repository.dto.Animal
-import com.PetSitter.repository.dto.Attendance
 import com.PetSitter.repository.dto.User
 import com.fasterxml.jackson.annotation.JsonProperty
 
@@ -19,9 +19,28 @@ data class AdvertResponse (
     val description: String,
     @field:JsonProperty("animal_types")
     val animalTypes: List<Animal>,
-    @field:JsonProperty("attendance_types")
-    val attendance: List<Attendance>,
-)
+    @field:JsonProperty("attendance_in")
+    val attendanceIn: Boolean,
+    @field:JsonProperty("attendance_out")
+    val attendanceOut: Boolean,
+) {
+    fun toAdvertCreatedMessage() : AdvertCreatedMessage.AdvertCreated {
+        return AdvertCreatedMessage.AdvertCreated
+            .newBuilder()
+            .setId(id)
+            .setUserId(user.id)
+            .setLogin(user.login)
+            .setFirstName(user.firstName)
+            .setLastName(user.lastName)
+            .setTitle(title)
+            .setDescription(description)
+            .setLocation(location)
+            .setAttendanceIn(attendanceIn)
+            .setAttendanceOut(attendanceOut)
+            .addAllAnimalTypes(animalTypes.map { AdvertCreatedMessage.Animal.valueOf(it.toString()) })
+            .build()
+    }
+}
 
 data class UserView(
     @field:JsonProperty("id")
@@ -49,9 +68,8 @@ class AdvertHelper {
                 advert.location,
                 advert.description,
                 animalTypes,
-                if (advert.attendanceIn)
-                    (if (advert.attendanceOut) listOf(Attendance.IN, Attendance.OUT) else listOf(Attendance.IN))
-                else listOf(Attendance.OUT)
+                advert.attendanceIn,
+                advert.attendanceOut
             )
         }
 
@@ -68,9 +86,8 @@ class AdvertHelper {
                 advert.location,
                 advert.description,
                 animalTypes,
-                if (advert.attendanceIn)
-                    (if (advert.attendanceOut) listOf(Attendance.IN, Attendance.OUT) else listOf(Attendance.IN))
-                else listOf(Attendance.OUT)
+                advert.attendanceIn,
+                advert.attendanceOut
             )
         }
     }

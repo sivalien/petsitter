@@ -1,3 +1,10 @@
+drop table if exists review;
+drop table if exists order_history;
+drop table if exists orders;
+drop table if exists sitter;
+drop table if exists customer;
+drop table if exists users;
+
 create table if not exists users(
     id         bigserial primary key,
     login      varchar(255) unique not null,
@@ -69,4 +76,11 @@ create table if not exists review (
     score       int not null,
     comment     text,
     primary key (sitter_id, customer_id)
+);
+
+create table if not exists kafka_message (
+    id bigserial primary key,
+    message_type varchar(64) not null,
+    message bytea not null,
+    status varchar(64) not null
 );

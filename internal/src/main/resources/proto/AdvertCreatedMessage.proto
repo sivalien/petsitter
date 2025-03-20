@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package com.petsitter.generated;
+
+import "google/protobuf/timestamp.proto";
+
+enum Animal {
+  UNKNOWN = 0;
+  DOG = 1;
+  CAT = 2;
+  OTHER = 3;
+}
+
+message AdvertCreated {
+  int64 id = 1;
+  int64 user_id = 2;
+  string login = 3;
+  string first_name = 4;
+  string last_name = 5;
+  string title = 6;
+  string location = 7;
+  string description = 8;
+  bool attendance_in = 9;
+  bool attendance_out = 10;
+  repeated Animal animal_types = 11;
+}
+
+message SitterCreatedMessage {
+  AdvertCreated advert = 12;
+  bool is_vet = 13;
+}
+
+message CustomerCreatedMessage {
+  AdvertCreated advert = 12;
+  google.protobuf.Timestamp begin_date = 13;
+  google.protobuf.Timestamp end_date = 14;
+}

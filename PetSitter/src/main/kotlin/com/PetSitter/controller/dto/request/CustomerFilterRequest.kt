@@ -8,6 +8,7 @@ data class CustomerFilterRequest(
     val location: String?,
     val beginDate: LocalDate?,
     val endDate: LocalDate?,
-    val attendanceTypes: Set<Attendance>?,
-    val animalTypes: Set<Animal>?
+    val animalTypes: Set<Animal>?,
+    val attendanceIn: Boolean,
+    val attendanceOut: Boolean
 )

@@ -5,7 +5,8 @@ import com.PetSitter.repository.dto.Attendance
 
 data class SitterFilterRequest(
     val location: String?,
-    val attendanceTypes: List<Attendance>?,
     val animalTypes: List<Animal>?,
-    val isVet: Boolean?
+    val isVet: Boolean?,
+    val attendanceIn: Boolean,
+    val attendanceOut: Boolean
 )

@@ -1,7 +1,7 @@
 package com.sitter.internal.repository
 
-import com.sitter.internal.model.DoneOrder
-import com.sitter.internal.model.OrderHistory
+import com.sitter.internal.repository.dto.DoneOrder
+import com.sitter.internal.repository.dto.OrderHistory
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Repository
@@ -36,7 +36,7 @@ class OrderHistoryRepository(
         ).singleOrNull()
     }
 
-    private val mapper = RowMapper<OrderHistory> {rs, _ ->
+    private val mapper = RowMapper<OrderHistory> { rs, _ ->
         OrderHistory(
             rs.getLong("id"),
             rs.getLong("sitter_id"),

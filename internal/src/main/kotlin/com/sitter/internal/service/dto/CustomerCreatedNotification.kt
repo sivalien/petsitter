@@ -1,6 +1,6 @@
-package com.sitter.internal.message
+package com.sitter.internal.service.dto
 
-import com.sitter.internal.view.CustomerView
+import com.sitter.internal.controller.dto.CustomerView
 
 data class CustomerCreatedNotification(
     val customer: CustomerView,

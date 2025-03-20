@@ -1,8 +1,8 @@
-package com.sitter.internal.model
+package com.sitter.internal.repository.dto
 
-import com.sitter.internal.view.AdvertView
-import com.sitter.internal.view.Animal
-import com.sitter.internal.view.Attendance
+import com.sitter.internal.controller.dto.AdvertView
+import com.sitter.internal.controller.dto.Animal
+
 
 data class Advert(
     val id: Long,
@@ -29,9 +29,8 @@ data class Advert(
             location,
             description,
             animalTypes,
-            if (attendanceIn)
-                (if (attendanceOut) listOf(Attendance.IN, Attendance.OUT) else listOf(Attendance.IN))
-            else listOf(Attendance.OUT)
+            attendanceIn,
+            attendanceOut
         )
     }
 }

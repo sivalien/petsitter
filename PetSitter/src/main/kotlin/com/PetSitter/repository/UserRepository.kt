@@ -45,26 +45,14 @@ class UserRepository(
         ).singleOrNull()
     }
 
-    fun changeUserInfo(userId: Long, userRequest: UserRequest) : User? {
-        return jdbcTemplate.query(
-            "update users set first_name = ?, last_name=?, contacts=? where id=? " +
-                    "returning id, login, password, first_name, last_name, contacts",
-            mapper,
-            userRequest.firstName,
-            userRequest.lastName,
-            userRequest.contacts,
-            userId
-        ).singleOrNull()
-    }
-
     private val mapper = RowMapper<User> { rs, _ -> User(
-        rs.getLong("id"),
-        rs.getString("login"),
-        rs.getString("password"),
-        rs.getString("first_name"),
-        rs.getString("last_name"),
-        rs.getString("contacts"),
-        Role.USER
-    )
+            rs.getLong("id"),
+            rs.getString("login"),
+            rs.getString("password"),
+            rs.getString("first_name"),
+            rs.getString("last_name"),
+            rs.getString("contacts"),
+            Role.USER
+        )
     }
 }

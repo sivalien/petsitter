@@ -28,9 +28,8 @@ data class Advert(
             location,
             description,
             animalTypes,
-            if (attendanceIn)
-                (if (attendanceOut) listOf(Attendance.IN, Attendance.OUT) else listOf(Attendance.IN))
-            else listOf(Attendance.OUT)
+            attendanceIn,
+            attendanceOut
         )
     }
 
@@ -47,9 +46,8 @@ data class Advert(
             location,
             description,
             animalTypes,
-            if (attendanceIn)
-                (if (attendanceOut) listOf(Attendance.IN, Attendance.OUT) else listOf(Attendance.IN))
-            else listOf(Attendance.OUT)
+            attendanceIn,
+            attendanceOut
         )
     }
 }

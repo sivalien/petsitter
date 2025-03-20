@@ -6,10 +6,10 @@ import com.PetSitter.controller.dto.request.SitterFilterRequest
 import com.PetSitter.repository.SitterRepository
 import com.PetSitter.controller.dto.request.SitterRequest
 import com.PetSitter.controller.dto.response.SitterResponse
+import com.PetSitter.repository.KafkaMessageRepository
 import com.PetSitter.repository.dto.*
 import com.PetSitter.service.dto.SitterDto
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import org.springframework.web.client.RestClient
@@ -19,13 +19,11 @@ import java.util.*
 @Service
 class SitterService(
     private val sitterRepository: SitterRepository,
-    private val sitterCreatedKafkaTemplate: KafkaTemplate<String, SitterResponse>,
-    @Value("\${kafka.sitter.created.topic}")
-    private val sitterCreatedTopicName: String,
     @Value("\${internal.api.url}")
     private val internalApiUrl: String,
     private val restClient: RestClient,
-    private val userService: UserService
+    private val userService: UserService,
+    private val kafkaMessageRepository: KafkaMessageRepository
 ) {
     @Transactional
     fun create(userId: Long, requestDto: SitterRequest) : SitterResponse {
@@ -37,7 +35,13 @@ class SitterService(
             requestDto.isVet
         )
         val sitter = SitterResponse(user, sitterRepository.create(sitterDto)!!)
-        sitterCreatedKafkaTemplate.send(sitterCreatedTopicName, sitter)
+
+        kafkaMessageRepository.create(
+            KafkaMessageType.SITTER_CREATED,
+            sitter.toSitterCreatedMessage().toByteArray(),
+            KafkaMessageStatus.NEW
+        )
+
         return sitter
     }
 
@@ -48,6 +52,7 @@ class SitterService(
 
     fun getByUserId(userId: Long) : Sitter? = sitterRepository.findByUserId(userId)
 
+    @Transactional
     fun getViewByUserId(userId: Long) : List<SitterResponse> {
         return getByUserId(userId)?.let { listOf(SitterResponse(userService.getById(userId), it)) } ?: emptyList()
     }
@@ -58,7 +63,8 @@ class SitterService(
         println(sitterFilter)
         val uri = UriComponentsBuilder.fromHttpUrl("$internalApiUrl/sitter")
             .queryParamIfPresent("location", Optional.ofNullable(sitterFilter.location))
-            .queryParam("attendance", sitterFilter.attendanceTypes ?: emptySet<Attendance>())
+            .queryParam("attendanceIn", sitterFilter.attendanceIn)
+            .queryParam("attendanceOut", sitterFilter.attendanceOut)
             .queryParam("animalTypes", sitterFilter.animalTypes ?: emptySet<Animal>())
             .queryParam("isVet", sitterFilter.isVet)
             .build()
@@ -72,6 +78,7 @@ class SitterService(
             ?.toList() ?: emptyList()
     }
 
+    @Transactional
     fun updateSitter(userId: Long, sitterId: Long, sitterRequest: SitterRequest) : SitterResponse {
         val sitter = getById(sitterId)
         if (sitter.advert.userId != userId)
@@ -81,12 +88,5 @@ class SitterService(
             sitterRequest.isVet
         )
         return SitterResponse(userService.getById(userId), sitterRepository.updateSitter(sitterId, sitterDto)!!)
-    }
-
-    fun delete(userId: Long, sitterId: Long) {
-        val sitter = getById(sitterId)
-        if (sitter.advert.userId != userId)
-            throw BadRequestException("Cannot change sitter of another user")
-        sitterRepository.delete(sitterId)
     }
 }

@@ -1,9 +1,9 @@
 package com.sitter.internal
 
+import com.petsitter.generated.AdvertCreatedMessage.CustomerCreatedMessage
+import com.petsitter.generated.AdvertCreatedMessage.SitterCreatedMessage
 import com.sitter.internal.service.CustomerService
 import com.sitter.internal.service.SitterService
-import com.sitter.internal.view.CustomerView
-import com.sitter.internal.view.SitterView
 import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.stereotype.Service
 
@@ -16,7 +16,7 @@ class KafkaConsumersService(
         topics = ["\${kafka.sitter.created.topic}"],
         groupId = "sitter-created",
         containerFactory = "sitterCreatedKafkaListenerContainerFactory")
-    fun consume(message: SitterView) {
+    fun consume(message: SitterCreatedMessage) {
         customerService.handleSitterCreated(message)
     }
 
@@ -24,7 +24,7 @@ class KafkaConsumersService(
         topics = ["\${kafka.customer.created.topic}"],
         groupId = "customer-created",
         containerFactory = "customerCreatedKafkaListenerContainerFactory")
-    fun consume(message: CustomerView) {
+    fun consume(message: CustomerCreatedMessage) {
         sitterService.handleCustomerCreated(message)
     }
 }

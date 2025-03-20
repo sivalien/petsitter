@@ -75,10 +75,6 @@ class SitterRepository(
         ).singleOrNull()
     }
 
-    fun delete(id: Long) {
-        jdbcTemplate.update("delete from sitter where id=?", id)
-    }
-
     private val mapper: RowMapper<Sitter> = RowMapper { rs, _ ->
         Sitter(
             Advert(

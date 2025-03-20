@@ -1,8 +1,7 @@
-package com.sitter.internal.model
+package com.sitter.internal.repository.dto
 
-import com.sitter.internal.view.Animal
-import com.sitter.internal.view.Attendance
-import com.sitter.internal.view.CustomerView
+import com.sitter.internal.controller.dto.Animal
+import com.sitter.internal.controller.dto.CustomerView
 import java.time.LocalDate
 
 data class Customer(
@@ -22,6 +21,7 @@ data class CustomerFilter(
     val location: String?,
     val dateBegin: LocalDate?,
     val dateEnd: LocalDate?,
-    val attendanceTypes: List<Attendance>,
-    val animalTypes: List<Animal>
+    val animalTypes: List<Animal>,
+    val attendanceIn: Boolean,
+    val attendanceOut: Boolean,
 )

@@ -1,4 +1,4 @@
-package com.sitter.internal.model
+package com.sitter.internal.repository.dto
 
 data class DoneOrder(
     val id: Long,

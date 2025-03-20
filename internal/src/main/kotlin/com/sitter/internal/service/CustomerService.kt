@@ -1,10 +1,12 @@
 package com.sitter.internal.service
 
-import com.sitter.internal.message.*
-import com.sitter.internal.model.CustomerFilter
+import com.petsitter.generated.AdvertCreatedMessage.SitterCreatedMessage
+import com.sitter.internal.controller.dto.CustomerView
 import com.sitter.internal.repository.CustomerRepository
-import com.sitter.internal.view.CustomerView
-import com.sitter.internal.view.SitterView
+import com.sitter.internal.repository.dto.CustomerFilter
+import com.sitter.internal.controller.dto.SitterView
+import com.sitter.internal.service.dto.SitterCreatedNotification
+import com.sitter.internal.service.dto.UserInfo
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Service
@@ -23,7 +25,8 @@ class CustomerService(
         return customerRepository.getByFilter(filter).map { it.toCustomerView() }
     }
 
-    fun handleSitterCreated(sitter: SitterView) {
+    fun handleSitterCreated(sitterCreatedMessage: SitterCreatedMessage) {
+        val sitter = SitterView(sitterCreatedMessage)
         println(sitter)
         val customers = getByFilter(messageToCustomerFilter(sitter))
             .filter { it.advert.user.id != sitter.advert.user.id }
@@ -43,8 +46,9 @@ class CustomerService(
             sitterView.advert.location,
             LocalDate.now(),
             null,
-            sitterView.advert.attendance,
-            sitterView.advert.animalTypes
+            sitterView.advert.animalTypes,
+            sitterView.advert.attendanceIn,
+            sitterView.advert.attendanceOut
         )
     }
 }

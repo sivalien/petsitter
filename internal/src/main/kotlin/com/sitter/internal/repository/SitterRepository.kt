@@ -1,11 +1,10 @@
 package com.sitter.internal.repository
 
-import com.sitter.internal.model.Advert
-import com.sitter.internal.model.Sitter
-import com.sitter.internal.model.SitterFilter
-import com.sitter.internal.model.User
-import com.sitter.internal.view.Animal
-import com.sitter.internal.view.Attendance
+import com.sitter.internal.controller.dto.Animal
+import com.sitter.internal.repository.dto.Advert
+import com.sitter.internal.repository.dto.Sitter
+import com.sitter.internal.repository.dto.SitterFilter
+import com.sitter.internal.repository.dto.User
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -26,16 +25,15 @@ class SitterRepository(
 
         filter.animalTypes.forEach{ conditions.add("${animalMapper[it]}=true") }
 
-        if (filter.attendance.size == 1 && filter.attendance[0] == Attendance.IN)
+        if (filter.attendanceIn && !filter.attendanceOut)
             conditions.add("attendance_in=true")
-        else if (filter.attendance.size == 1 && filter.attendance[0] == Attendance.OUT)
+        else if (!filter.attendanceIn && filter.attendanceOut)
             conditions.add("attendance_out=true")
 
         val query = "select sitter.id as sitter_id, title, location, description, attendance_in, attendance_out, " +
                 "with_dog, with_cat, with_other, is_vet, user_id, first_name, last_name, is_vet, login " +
                 "from sitter inner join users on sitter.user_id = users.id " +
                 if (conditions.isNotEmpty()) conditions.joinToString(" and ", " where ") else ""
-        println(query)
 
         return namedJdbcTemplate.query(query, params, mapper)
     }

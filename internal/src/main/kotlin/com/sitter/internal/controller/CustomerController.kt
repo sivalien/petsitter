@@ -1,7 +1,7 @@
 package com.sitter.internal.controller
 
-import com.sitter.internal.view.CustomerView
-import com.sitter.internal.model.CustomerFilter
+import com.sitter.internal.controller.dto.CustomerView
+import com.sitter.internal.repository.dto.CustomerFilter
 import com.sitter.internal.service.CustomerService
 import org.springframework.http.ResponseEntity
 import org.springframework.stereotype.Controller

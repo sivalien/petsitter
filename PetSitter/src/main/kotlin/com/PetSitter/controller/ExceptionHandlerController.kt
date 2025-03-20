@@ -26,11 +26,11 @@ class ExceptionHandlerController {
         return getBody(exception, HttpStatus.BAD_REQUEST)
     }
 
-    @ExceptionHandler(RuntimeException::class)
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    fun handleRuntimeException(exception: RuntimeException) : ResponseEntity<ErrorMessage> {
-        return getBody(exception, HttpStatus.INTERNAL_SERVER_ERROR)
-    }
+//    @ExceptionHandler(RuntimeException::class)
+//    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+//    fun handleRuntimeException(exception: RuntimeException) : ResponseEntity<ErrorMessage> {
+//        return getBody(exception, HttpStatus.INTERNAL_SERVER_ERROR)
+//    }
 
     private fun getBody(exception: Exception, status: HttpStatus) : ResponseEntity<ErrorMessage> {
         return ResponseEntity(ErrorMessage(status.value(), exception.message), status)

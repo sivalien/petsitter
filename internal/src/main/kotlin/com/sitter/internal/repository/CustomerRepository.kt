@@ -1,11 +1,10 @@
 package com.sitter.internal.repository
 
-import com.sitter.internal.model.Advert
-import com.sitter.internal.model.Customer
-import com.sitter.internal.model.CustomerFilter
-import com.sitter.internal.model.User
-import com.sitter.internal.view.Animal
-import com.sitter.internal.view.Attendance
+import com.sitter.internal.controller.dto.Animal
+import com.sitter.internal.repository.dto.Advert
+import com.sitter.internal.repository.dto.Customer
+import com.sitter.internal.repository.dto.CustomerFilter
+import com.sitter.internal.repository.dto.User
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate
 import org.springframework.stereotype.Repository
@@ -23,14 +22,14 @@ class CustomerRepository(
         )
 
         val conditions = emptyList<String>().toMutableList()
-        println(params["location"])
+
         filter.location?.let { conditions.add("LOWER(location) = LOWER(:location)") }
         filter.dateBegin?.let { conditions.add("begin_date >= :date_begin ") }
         filter.dateEnd?.let { conditions.add("end_date <= :date_end") }
 
-        if (filter.attendanceTypes.size == 1 && filter.attendanceTypes[0] == Attendance.IN)
+        if (filter.attendanceIn && !filter.attendanceOut)
             conditions.add("attendance_in=true")
-        else if (filter.attendanceTypes.size == 1 && filter.attendanceTypes[0] == Attendance.OUT)
+        else if (!filter.attendanceIn && filter.attendanceOut)
             conditions.add("attendance_out=true")
 
         val animalConditions = filter.animalTypes.joinToString(" or ") { "${animalMapper[it]}=true" }
@@ -42,7 +41,6 @@ class CustomerRepository(
                 " from customer inner join users on customer.user_id = users.id " +
                 " where available=true " +
                 if (conditions.isNotEmpty()) conditions.joinToString(" and ", " and ") else ""
-        println(query)
 
         return namedParameterJdbcTemplate.query(query, params, mapper)
     }
